@@ -5,7 +5,9 @@ import { summary } from './analysis.mjs';
 import tickets from '../src/lib/data/tickets-4471.json' with { type: 'json' };
 
 const html = readFileSync(new URL('../build/kb/incidents/4471-review/index.html', import.meta.url), 'utf8');
-const signature = 'Codex with awieckowski | S01E03 | 2026-10-28';
+const source = readFileSync(new URL('../src/routes/kb/incidents/4471-review/+page.svx', import.meta.url), 'utf8');
+const signature = source.match(/^signature:\s*'([^']+)'$/m)?.[1];
+assert.ok(signature?.startsWith('v1.'), 'The page must carry the course-issued signature');
 const text = html.replace(/<!--[\s\S]*?-->/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
 for (const group of summary.groups) {
   assert.ok(text.includes(String(group.count)), `Missing rendered count for ${group.cause}`);

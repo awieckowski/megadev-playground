@@ -40,6 +40,8 @@ Exported 2026-10-04 from the `support` repo, `apps/kb/` → `src/`.
 The original data and pages are preserved. The new investigation is
 `src/routes/kb/incidents/4471-review/+page.svx`; decision 0002 proposes replacing
 subject-only deduplication without editing accepted decision 0001.
+The new pages use the course-issued ticket verbatim as their frontmatter signature,
+as required by S01E03. `RenderStamp` computes the corresponding desk reference.
 
 Requires Node.js 22.18+ (native TypeScript stripping) and npm.
 

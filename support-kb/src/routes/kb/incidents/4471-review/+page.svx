@@ -4,7 +4,7 @@ title: '#4471 review: two date problems, separate tickets'
 owner: awieckowski with Codex
 status: reviewed
 reviewed: '2026-10-28'
-signature: 'Codex with awieckowski | S01E03 | 2026-10-28'
+signature: 'v1.eyJzdWIiOiIyNDUiLCJhdWQiOiJjaGFsbGVuZ2U6d2hhdC1pdC1zaG93cyIsImlhdCI6MTc5MzE4NTMzNywiZXhwIjoxNzkzMjcxNzM3fQ.d8vVYayDXYcQmMiK6XRhAFDX--nD4otazremo8Bz80A'
 ---
 
 <script>
