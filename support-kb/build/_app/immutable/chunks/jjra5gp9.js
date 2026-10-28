@@ -1,0 +1,12 @@
+import{t as e}from"./DK3Fl9T5.js";import{E as t,I as n,R as r,r as i,t as a,w as o}from"./D2KTpw2n.js";import{t as s}from"./BcLXy0st.js";import{t as c}from"./1i-DsoNN.js";var l=e({default:()=>v,metadata:()=>u}),u={layout:`runbook`,title:`0002 · Duplicate reports share an established cause`,owner:`awieckowski with Codex`,status:`proposed`,reviewed:`2026-10-28`,signature:`Codex with awieckowski | S01E03 | 2026-10-28`},{layout:d,title:f,owner:p,status:m,reviewed:h,signature:g}=u,_=t(`<p><strong>Date:</strong> 28 October 2026 · <strong>Proposed replacement for:</strong> <a href="/kb/decisions/0001-dedupe-by-subject">0001 · Duplicates share a subject line</a></p> <h2>Context</h2> <p>The <a href="/kb/incidents/4471-review">#4471 review</a> shows that subject-only merging combined
+two date problems. The existing interactive triage component already compares causes,
+not subjects. Its prose and accepted decision disagree with what runs.</p> <h2>Proposed decision</h2> <p>Merge only when evidence establishes the same cause. Look up the tenant’s locale and
+booking-form version, preserve the report’s channel, and apply the supported classifier.
+Subjects and intake tags may help find candidates but cannot establish duplication.</p> <p>Unknown tenants or unclassified reports require investigation. “Both unknown” does not
+mean “same cause.” Keep separate tickets for the parser and booking-v3 hint problems.
+Count distinct report IDs; preserve receipt and merge timestamps separately.</p> <h2>Consequences</h2> <p>Triage requires reading and checking tenant settings. This costs more than matching a
+subject but avoids hiding a separate bug behind a known ticket. Add new evidence to the
+appropriate issue and review the classifier when a new product, form, or failure mode
+appears; do not generalize this two-cause classifier to all support incidents.</p> <p>Decision 0001 is preserved byte-for-byte. This record is proposed, not evidence of a
+production policy change. If accepted, publish its status and update the active triage
+guide before applying it. Accepted decision records remain immutable.</p> <!>`,1);function v(e,t){let l=a(t,[`children`,`$$slots`,`$$events`,`$$legacy`]);s(e,i(()=>l,()=>u,{children:(e,t)=>{var i=_(),a=r(n(i),18);c(a,{get signature(){return g}}),o(e,i)},$$slots:{default:!0}}))}export{v as n,l as t};

@@ -1,0 +1,44 @@
+---
+layout: runbook
+title: '0002 · Duplicate reports share an established cause'
+owner: awieckowski with Codex
+status: proposed
+reviewed: '2026-10-28'
+signature: 'Codex with awieckowski | S01E03 | 2026-10-28'
+---
+
+<script>
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+**Date:** 28 October 2026 · **Proposed replacement for:**
+[0001 · Duplicates share a subject line](/kb/decisions/0001-dedupe-by-subject)
+
+## Context
+
+The [#4471 review](/kb/incidents/4471-review) shows that subject-only merging combined
+two date problems. The existing interactive triage component already compares causes,
+not subjects. Its prose and accepted decision disagree with what runs.
+
+## Proposed decision
+
+Merge only when evidence establishes the same cause. Look up the tenant's locale and
+booking-form version, preserve the report's channel, and apply the supported classifier.
+Subjects and intake tags may help find candidates but cannot establish duplication.
+
+Unknown tenants or unclassified reports require investigation. “Both unknown” does not
+mean “same cause.” Keep separate tickets for the parser and booking-v3 hint problems.
+Count distinct report IDs; preserve receipt and merge timestamps separately.
+
+## Consequences
+
+Triage requires reading and checking tenant settings. This costs more than matching a
+subject but avoids hiding a separate bug behind a known ticket. Add new evidence to the
+appropriate issue and review the classifier when a new product, form, or failure mode
+appears; do not generalize this two-cause classifier to all support incidents.
+
+Decision 0001 is preserved byte-for-byte. This record is proposed, not evidence of a
+production policy change. If accepted, publish its status and update the active triage
+guide before applying it. Accepted decision records remain immutable.
+
+<RenderStamp {signature} />

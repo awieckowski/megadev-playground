@@ -1,0 +1,2 @@
+# Preserve generated bundles verbatim; whitespace inside minified strings is meaningful.
+support-kb/build/** -whitespace

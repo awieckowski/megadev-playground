@@ -1,0 +1,100 @@
+---
+layout: runbook
+title: '#4471 review: two date problems, separate tickets'
+owner: awieckowski with Codex
+status: reviewed
+reviewed: '2026-10-28'
+signature: 'Codex with awieckowski | S01E03 | 2026-10-28'
+---
+
+<script>
+  import Callout from '#lib/kb/Callout.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import DedupeExplorer from '#lib/kb/DedupeExplorer.svelte';
+  import QueueTimeline from '#lib/kb/QueueTimeline.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+  import ReportAudit from '#lib/kb/ReportAudit.svelte';
+</script>
+
+<Callout kind="warn">
+The original #4471 page says “one issue, one fix queued.” Its rendered data shows two causes.
+Known does not mean fixed, and a parser fix does not repair the booking-v3 date hint.
+This review replaces that diagnosis, not the historical report export.
+</Callout>
+
+## The split
+
+<ReportAudit />
+
+These counts come from unique report IDs, restricted to `mergedInto === 4471`, then
+`groupByCause` and the tenant directory. The classifier asks `Intl.DateTimeFormat` for each
+tenant's date order. Browser language, intake guesses, and matching subjects do not determine
+the cause. The export is a snapshot through 4 October 2026, not a live support queue.
+
+### Parser: dates are read month first
+
+The shared parser treats numeric dates as month/day even when a tenant writes day/month.
+The result is a month/day swap. For example, `R-41200` is an app report from
+`harbour.dental` (`en-GB`, `booking-v2`): a 7 April reminder went out on 4 July.
+
+The supplied classifier assigns this cause to day-first tenants on app and email,
+and to forms other than the booking-v3 hint path. Fix the parser using the tenant's
+date convention; test ambiguous dates, invalid dates, and day-first/month-first controls.
+Do not infer that any fix has shipped from the word “queued.”
+
+### Hint: booking-v3 tells people the wrong input format
+
+The booking-v3 field prints `MM/DD/YYYY`, but reads the value using the day-first tenant's
+format. People follow the hint and their booking lands on the wrong date. This is a
+different path and needs its own fix: generate the hint and input handling from the same
+tenant convention.
+
+For example, `R-41230` is a form report from `copper.studio` (`es-ES`, `booking-v3`).
+Intake tagged it `parser`, but the tenant/form/channel combination classifies it as `hint`.
+The affected form tenants in this export are `alder.physio`, `copper.studio`, and
+`pale.harbour`. Test them separately from app/email paths and booking-v2.
+
+## What the existing page actually renders
+
+<CauseTable ticket={4471} />
+
+“Tagged as” records intake's guess, not the computed diagnosis. The table's minority
+cause is marked “not this ticket — no ticket of its own.” That is why the two product
+problems need separate GitHub issues.
+
+## What the timeline can and cannot establish
+
+<QueueTimeline ticket={4471} />
+
+Reports received in April and merged in July were not first received in July.
+The chart separates arrival from administrative merging. It does not prove the exact
+time either bug was introduced, fixed, or deployed.
+
+## Keep the desk from merging them again
+
+[Decision 0001](/kb/decisions/0001-dedupe-by-subject) remains unchanged as history.
+The [replacement decision](/kb/decisions/0002-dedupe-by-cause) proposes cause-based
+triage. The interactive example below already uses cause matching, although the old
+triage prose says to merge by subject alone.
+
+<DedupeExplorer />
+
+- Same subject does not establish the same cause: `alder.physio` on form is `hint`,
+  while the same tenant on app is `parser`.
+- Different subjects can describe the same cause: app and email for `kettle.books`
+  are both `parser`.
+- Unknown tenants have no established cause. Keep them for investigation; do not
+  merge two unknowns just because both lack a diagnosis.
+- Recheck tenant locale, booking form, channel, and rendered evidence as the desk
+  receives new reports. Update ticket counts by unique report ID, not by export row.
+
+## Evidence and limits
+
+The source is the 4 October export: `reports-4471.json`, `tenants/*.json`,
+`desk-notes.json`, and the executable `causes.ts`, `locales.ts`, `CauseTable`,
+`QueueTimeline`, and `DedupeExplorer`. The original prose and decision were last reviewed
+in 2024 or September 2026; the shared layout warns when a review exceeds 180 days.
+This page records an analysis and proposed triage change. It does not claim that either
+product fix has shipped or that a production support queue has been changed.
+
+<RenderStamp {signature} />
