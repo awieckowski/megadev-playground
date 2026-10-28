@@ -1,0 +1,19 @@
+{
+  "source": "https://hq.mega.dev/challenges/what-it-shows#engineering-update",
+  "observedOn": "2026-10-28",
+  "supportTicket": 4471,
+  "closedOn": "2026-10-05",
+  "outcomes": {
+    "parser": {
+      "status": "FIXED",
+      "message": "fix(dates): parse dd/mm for eu locales",
+      "githubClosureReason": "completed"
+    },
+    "hint": {
+      "status": "WON'T FIX",
+      "message": "booking-v3 form retired",
+      "githubClosureReason": "not planned"
+    }
+  },
+  "verificationLimit": "Course-provided engineering update; no independent live-product or deployment verification."
+}

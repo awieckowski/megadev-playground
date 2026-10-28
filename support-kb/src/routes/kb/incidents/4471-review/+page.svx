@@ -19,7 +19,8 @@ signature: 'v1.eyJzdWIiOiIyNDUiLCJhdWQiOiJjaGFsbGVuZ2U6d2hhdC1pdC1zaG93cyIsImlhd
 <Callout kind="warn">
 The original #4471 page says “one issue, one fix queued.” Its rendered data shows two causes.
 Known does not mean fixed, and a parser fix does not repair the booking-v3 date hint.
-This review replaces that diagnosis, not the historical report export.
+This review replaces that diagnosis, not the historical report export. The 5 October
+engineering update below records two different closure outcomes.
 </Callout>
 
 ## The split
@@ -30,6 +31,24 @@ These counts come from unique report IDs, restricted to `mergedInto === 4471`, t
 `groupByCause` and the tenant directory. The classifier asks `Intl.DateTimeFormat` for each
 tenant's date order. Browser language, intake guesses, and matching subjects do not determine
 the cause. The export is a snapshot through 4 October 2026, not a live support queue.
+
+## Engineering update: 5 October 2026
+
+After the tickets were accepted, the [course's engineering update](https://hq.mega.dev/challenges/what-it-shows#engineering-update)
+reported that #4471 closed on **5 October 2026**, one day after this export.
+Its outcomes are separate:
+
+- **Parser — FIXED:** `fix(dates): parse dd/mm for eu locales`. The
+  [parser issue](https://github.com/awieckowski/megadev-playground/issues/1) is closed as completed
+  on that engineering report.
+- **Hint — WON'T FIX:** `booking-v3 form retired`. The
+  [hint issue](https://github.com/awieckowski/megadev-playground/issues/2) is closed as not planned,
+  not as a repaired hint. Retiring the form is a different outcome from fixing its code.
+
+These are course-provided engineering outcomes, not independently observed product
+tests or deployment results. They do not change the historical report counts or show
+that old bookings were repaired. The diagnosis and checks below describe the exported
+failure paths; they are not evidence that either path remains active after closure.
 
 ### Parser: dates are read month first
 
@@ -94,7 +113,9 @@ The source is the 4 October export: `reports-4471.json`, `tenants/*.json`,
 `desk-notes.json`, and the executable `causes.ts`, `locales.ts`, `CauseTable`,
 `QueueTimeline`, and `DedupeExplorer`. The original prose and decision were last reviewed
 in 2024 or September 2026; the shared layout warns when a review exceeds 180 days.
-This page records an analysis and proposed triage change. It does not claim that either
-product fix has shipped or that a production support queue has been changed.
+This page records an analysis, proposed triage change, and the later engineering report.
+Only the parser is reported fixed; the hint is reported won't fix because its form was
+retired. No live-product verification, deployment audit, or change to a production
+support queue was performed here.
 
 <RenderStamp {signature} />

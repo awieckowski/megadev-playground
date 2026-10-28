@@ -9,11 +9,11 @@
 		<link href="../../../_app/immutable/chunks/BHEAtpxo.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/D2KTpw2n.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/BDBbYZz3.js" rel="modulepreload">
-		<link href="../../../_app/immutable/entry/app.lxTpO4uQ.js" rel="modulepreload">
+		<link href="../../../_app/immutable/entry/app.D6whOcfs.js" rel="modulepreload">
 		<link href="../../../_app/immutable/nodes/0.C83rTuV_.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/DK3Fl9T5.js" rel="modulepreload">
-		<link href="../../../_app/immutable/nodes/6.B8pRSRU6.js" rel="modulepreload">
-		<link href="../../../_app/immutable/chunks/CSAsHyKJ.js" rel="modulepreload">
+		<link href="../../../_app/immutable/nodes/6.D3KAY8k_.js" rel="modulepreload">
+		<link href="../../../_app/immutable/chunks/B5IdbDkk.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/BcLXy0st.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/1i-DsoNN.js" rel="modulepreload">
 		<link href="../../../_app/immutable/chunks/CKflrZGQ.js" rel="modulepreload">
@@ -29,13 +29,20 @@
   <body data-sveltekit-preload-data="hover">
     <div style="display: contents"><!--[--><!--[--><!--[0--><!--[--><!--[--><!--[-1--><!--[--><div class="kb svelte-e2jw2j"><header><a class="crumb svelte-e2jw2j" href="/kb">support desk · kb</a> <h1 class="svelte-e2jw2j">#4471 review: two date problems, separate tickets</h1> <p class="meta svelte-e2jw2j"><span>owner <b>awieckowski with Codex</b></span> <span class="status reviewed svelte-e2jw2j">reviewed</span> <span class="svelte-e2jw2j">reviewed 2026-10-28 · 0 days ago</span></p></header> <!--[-1--><!--]--> <main><aside class="warn svelte-17bri61"><!---->The original #4471 page says “one issue, one fix queued.” Its rendered data shows two causes.
 Known does not mean fixed, and a parser fix does not repair the booking-v3 date hint.
-This review replaces that diagnosis, not the historical report export.<!----></aside><!----> <h2>The split</h2> <p><strong>412 unique reports</strong> in 427 export rows.
+This review replaces that diagnosis, not the historical report export. The 5 October
+engineering update below records two different closure outcomes.<!----></aside><!----> <h2>The split</h2> <p><strong>412 unique reports</strong> in 427 export rows.
   The export repeats 15 rows; repeated IDs are not new reports.</p> <table aria-label="Separate problems and report counts"><thead><tr><th>problem</th><th>reports</th><th>tenants</th><th>GitHub issue</th></tr></thead><tbody><!--[--><tr><td><code>parser</code>: Month-first parser for day-first tenants</td><td>379</td><td>11</td><td><!--[0--><a href="https://github.com/awieckowski/megadev-playground/issues/1">parser issue</a><!--]--></td></tr><tr><td><code>hint</code>: booking-v3 date hint disagrees with tenant format</td><td>33</td><td>3</td><td><!--[0--><a href="https://github.com/awieckowski/megadev-playground/issues/2">hint issue</a><!--]--></td></tr><!--]--></tbody></table> <p>The intake tag disagrees with the tenant-and-channel classifier on <strong>38 reports</strong>. Counting tags gives a different split.</p> <p>The desk marked <strong>5 reports</strong> as one-day moves:
   R-41202, R-41209, R-41236, R-41344, R-41620. The supplied classifier places them under <code>parser</code>; keep their descriptions for investigation, not a third counted cause.</p> <p>The largest merge batch was <strong>184 reports on 2026-07-02</strong>.
   Receipt time and merge time describe different events. A merge spike does not establish
   when a bug started.</p><!----> <p>These counts come from unique report IDs, restricted to <code>mergedInto === 4471</code>, then <code>groupByCause</code> and the tenant directory. The classifier asks <code>Intl.DateTimeFormat</code> for each
 tenant’s date order. Browser language, intake guesses, and matching subjects do not determine
-the cause. The export is a snapshot through 4 October 2026, not a live support queue.</p> <h3>Parser: dates are read month first</h3> <p>The shared parser treats numeric dates as month/day even when a tenant writes day/month.
+the cause. The export is a snapshot through 4 October 2026, not a live support queue.</p> <h2>Engineering update: 5 October 2026</h2> <p>After the tickets were accepted, the <a href="https://hq.mega.dev/challenges/what-it-shows#engineering-update" rel="nofollow">course’s engineering update</a> reported that #4471 closed on <strong>5 October 2026</strong>, one day after this export.
+Its outcomes are separate:</p> <ul><li><strong>Parser — FIXED:</strong> <code>fix(dates): parse dd/mm for eu locales</code>. The <a href="https://github.com/awieckowski/megadev-playground/issues/1" rel="nofollow">parser issue</a> is closed as completed
+on that engineering report.</li> <li><strong>Hint — WON’T FIX:</strong> <code>booking-v3 form retired</code>. The <a href="https://github.com/awieckowski/megadev-playground/issues/2" rel="nofollow">hint issue</a> is closed as not planned,
+not as a repaired hint. Retiring the form is a different outcome from fixing its code.</li></ul> <p>These are course-provided engineering outcomes, not independently observed product
+tests or deployment results. They do not change the historical report counts or show
+that old bookings were repaired. The diagnosis and checks below describe the exported
+failure paths; they are not evidence that either path remains active after closure.</p> <h3>Parser: dates are read month first</h3> <p>The shared parser treats numeric dates as month/day even when a tenant writes day/month.
 The result is a month/day swap. For example, <code>R-41200</code> is an app report from <code>harbour.dental</code> (<code>en-GB</code>, <code>booking-v2</code>): a 7 April reminder went out on 4 July.</p> <p>The supplied classifier assigns this cause to day-first tenants on app and email,
 and to forms other than the booking-v3 hint path. Fix the parser using the tenant’s
 date convention; test ambiguous dates, invalid dates, and day-first/month-first controls.
@@ -56,21 +63,23 @@ while the same tenant on app is <code>parser</code>.</li> <li>Different subjects
 merge two unknowns just because both lack a diagnosis.</li> <li>Recheck tenant locale, booking form, channel, and rendered evidence as the desk
 receives new reports. Update ticket counts by unique report ID, not by export row.</li></ul> <h2>Evidence and limits</h2> <p>The source is the 4 October export: <code>reports-4471.json</code>, <code>tenants/*.json</code>, <code>desk-notes.json</code>, and the executable <code>causes.ts</code>, <code>locales.ts</code>, <code>CauseTable</code>, <code>QueueTimeline</code>, and <code>DedupeExplorer</code>. The original prose and decision were last reviewed
 in 2024 or September 2026; the shared layout warns when a review exceeds 180 days.
-This page records an analysis and proposed triage change. It does not claim that either
-product fix has shipped or that a production support queue has been changed.</p> <!--[0--><p class="stamp svelte-1280m42">desk ref <b class="svelte-1280m42">DR-QHK1-G40W</b></p><!--]--><!----><!----></main> <footer class="svelte-e2jw2j">Pages are written by people. Tables and charts are built from data at render time.</footer></div><!--]--><!--]--><!--]--><!----><!--]--><!--]--><!--]--><!----> <!--[-1--><!--]--><!--]-->
+This page records an analysis, proposed triage change, and the later engineering report.
+Only the parser is reported fixed; the hint is reported won’t fix because its form was
+retired. No live-product verification, deployment audit, or change to a production
+support queue was performed here.</p> <!--[0--><p class="stamp svelte-1280m42">desk ref <b class="svelte-1280m42">DR-QHK1-G40W</b></p><!--]--><!----><!----></main> <footer class="svelte-e2jw2j">Pages are written by people. Tables and charts are built from data at render time.</footer></div><!--]--><!--]--><!--]--><!----><!--]--><!--]--><!--]--><!----> <!--[-1--><!--]--><!--]-->
 			
 			<script>
 				{
-					__sveltekit_1jpdp2u = {
+					__sveltekit_lphhdr = {
 						base: new URL("../../..", location).pathname.slice(0, -1),
-						version: "1793185425066"
+						version: "1793186070178"
 					};
 
 					const element = document.currentScript.parentElement;
 
 					import("../../../_app/immutable/entry/start.D_uPDhA5.js").then(async (kit) => {
-						kit.init(__sveltekit_1jpdp2u);
-						const app = await import("../../../_app/immutable/entry/app.lxTpO4uQ.js");
+						kit.init(__sveltekit_lphhdr);
+						const app = await import("../../../_app/immutable/entry/app.D6whOcfs.js");
 						kit.start(app, element, {
 							node_ids: [0, 6],
 							data: [null,null],

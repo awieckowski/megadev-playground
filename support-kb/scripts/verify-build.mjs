@@ -21,6 +21,11 @@ assert.ok(!html.includes('<CauseTable'));
 assert.ok(!html.includes('<RenderStamp'));
 assert.ok(text.includes('not this ticket — no ticket of its own'));
 assert.ok(text.includes('184 reports on 2026-07-02'));
+assert.ok(text.includes('Engineering update: 5 October 2026'));
+assert.ok(text.includes('fix(dates): parse dd/mm for eu locales'));
+assert.ok(text.includes('booking-v3 form retired'));
+assert.ok(text.includes('not planned'));
+assert.ok(text.includes('not as a repaired hint'));
 for (const url of Object.values(tickets)) {
   assert.match(url, /^https:\/\/github\.com\/awieckowski\/megadev-playground\/issues\/\d+$/);
   assert.ok(html.includes(`href="${url}"`), `Missing actual issue link: ${url}`);

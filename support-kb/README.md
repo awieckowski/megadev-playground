@@ -42,6 +42,9 @@ The original data and pages are preserved. The new investigation is
 subject-only deduplication without editing accepted decision 0001.
 The new pages use the course-issued ticket verbatim as their frontmatter signature,
 as required by S01E03. `RenderStamp` computes the corresponding desk reference.
+The review also records the course's 5 October engineering update: parser fixed;
+hint won't fix because booking-v3 was retired. Those outcomes are attributed to the
+course, not presented as independent live-product verification.
 
 Requires Node.js 22.18+ (native TypeScript stripping) and npm.
 
